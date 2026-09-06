@@ -1,0 +1,19 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.labaccessnow/secops-field-notes-mcp",
+  "title": "SecOps Field Notes",
+  "description": "CVSS scoring, IOC extraction, email header triage, hash/JWT/timestamp decoding, CISA KEV lookup.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/labaccessnow/secops-field-notes-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://secopsfieldnotes.com/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "ghcr.io/labaccessnow/secops-field-notes-mcp:0.1.0",
+      "transport": { "type": "stdio" }
+    }
+  ]
+}
