@@ -16,8 +16,6 @@ import { parseTimestamp, formats, renderTimestamp } from "./lib/timestamp.js";
 import { decodeLayers, renderLayers, OP_NAMES } from "./lib/decoder.js";
 import { lookupKev, renderKev } from "./lib/kev.js";
 
-const SITE = "https://secopsfieldnotes.com/?s=mcp";
-const sign = (body, link = SITE) => `${body}\n\n— SecOps Field Notes · ${link}`;
 const str = (v, fallback = "") => (typeof v === "string" ? v : v === undefined || v === null ? fallback : String(v));
 
 const TOOLS = [
@@ -34,7 +32,7 @@ const TOOLS = [
         metrics: { type: "object", description: "Alternative to vector: {AV, AC, PR, UI, S, C, I, A} with single-letter values." },
       },
     },
-    run: (a) => sign(renderCvss(cvssFromInput({ vector: str(a.vector), metrics: a.metrics }))),
+    run: (a) => renderCvss(cvssFromInput({ vector: str(a.vector), metrics: a.metrics })),
   },
   {
     name: "extract_iocs",
@@ -47,7 +45,7 @@ const TOOLS = [
       properties: { text: { type: "string" }, defanged: { type: "boolean", description: "Defang the output (default true)." } },
       required: ["text"],
     },
-    run: (a) => sign(renderIocs(extractIocs(str(a.text)), a.defanged !== false)),
+    run: (a) => renderIocs(extractIocs(str(a.text)), a.defanged !== false),
   },
   {
     name: "defang_text",
@@ -57,7 +55,7 @@ const TOOLS = [
       properties: { text: { type: "string" }, mode: { type: "string", description: "'defang' (default) or 'refang'." } },
       required: ["text"],
     },
-    run: (a) => sign(str(a.mode).toLowerCase() === "refang" ? refang(str(a.text)) : defang(str(a.text))),
+    run: (a) => (str(a.mode).toLowerCase() === "refang" ? refang(str(a.text)) : defang(str(a.text))),
   },
   {
     name: "analyze_email_headers",
@@ -66,25 +64,25 @@ const TOOLS = [
       "originating public IP, SPF/DKIM/DMARC verdicts, and the mismatches that matter — From vs Return-Path domain, " +
       "Reply-To pointing elsewhere (BEC), authentication failures, hops timestamped before the previous one.",
     inputSchema: { type: "object", properties: { headers: { type: "string", description: "The raw message source, or at least the header block." } }, required: ["headers"] },
-    run: (a) => sign(renderHeaders(analyzeHeaders(str(a.headers)))),
+    run: (a) => renderHeaders(analyzeHeaders(str(a.headers))),
   },
   {
     name: "identify_hash",
     description: "Identify a hash by shape: bcrypt, Argon2, yescrypt, the Unix crypt family, LM:NT pairs, and hex-length MD5/NTLM, SHA-1, SHA-224/256/384/512 — with what that shape implies for cracking or reuse.",
     inputSchema: { type: "object", properties: { hash: { type: "string" } }, required: ["hash"] },
-    run: (a) => sign(renderHash(identifyHash(str(a.hash)))),
+    run: (a) => renderHash(identifyHash(str(a.hash))),
   },
   {
     name: "decode_jwt",
     description: "Decode a JWT's header and payload (no verification — it says so), show iat/nbf/exp as dates, and flag alg:none, missing alg, expiry, tokens that never expire, and long-lived tokens.",
     inputSchema: { type: "object", properties: { token: { type: "string", description: "The token, with or without a 'Bearer ' prefix." } }, required: ["token"] },
-    run: (a) => sign(renderJwt(decodeJwt(str(a.token)))),
+    run: (a) => renderJwt(decodeJwt(str(a.token))),
   },
   {
     name: "convert_timestamp",
     description: "Turn any timestamp into every form an investigation needs: Unix epoch in s/ms/µs (detected by digit count), Windows FILETIME, ISO 8601, RFC 2822 dates, or 'now' — with UTC, weekday and relative time.",
     inputSchema: { type: "object", properties: { value: { type: "string" } }, required: ["value"] },
-    run: (a) => { const p = parseTimestamp(str(a.value)); return sign(renderTimestamp(p, p.error ? null : formats(p.ms))); },
+    run: (a) => { const p = parseTimestamp(str(a.value)); return renderTimestamp(p, p.error ? null : formats(p.ms)); },
   },
   {
     name: "decode_layers",
@@ -96,7 +94,7 @@ const TOOLS = [
       properties: { input: { type: "string" }, ops: { type: "array", items: { type: "string" }, description: `Ops in order, from: ${OP_NAMES.join(", ")}` } },
       required: ["input"],
     },
-    run: (a) => sign(renderLayers(decodeLayers(str(a.input), a.ops))),
+    run: (a) => renderLayers(decodeLayers(str(a.input), a.ops)),
   },
   {
     name: "lookup_kev",
@@ -106,8 +104,8 @@ const TOOLS = [
       "containing CVE ids. The only tool here that touches the network; the catalog is cached for an hour.",
     inputSchema: { type: "object", properties: { cves: { type: "string", description: "One or more CVE ids, or text containing them." } }, required: ["cves"] },
     run: async (a) => {
-      try { return sign(renderKev(await lookupKev(str(a.cves)))); }
-      catch (e) { return sign(`Could not fetch the KEV catalog (${e.message}). It is at https://www.cisa.gov/known-exploited-vulnerabilities-catalog`); }
+      try { return renderKev(await lookupKev(str(a.cves))); }
+      catch (e) { return `Could not fetch the KEV catalog (${e.message}). It is at https://www.cisa.gov/known-exploited-vulnerabilities-catalog`; }
     },
   },
   {
@@ -125,10 +123,10 @@ const TOOLS = [
           const get = (tag) => { const t = m[1].match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`)); return t ? unescape(t[1].replace(/<!\[CDATA\[|\]\]>/g, "")).trim() : ""; };
           return { title: get("title"), date: get("pubDate").replace(/\s\d{2}:\d{2}:\d{2}.*$/, ""), summary: get("description").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 300) };
         });
-        if (!items.length) return sign("No episodes found in the feed right now.");
-        return sign(`Latest from This Week in Security:\n\n${items.map((i) => `${i.date} — ${i.title}\n  ${i.summary}`).join("\n\n")}\n\nListen: https://secopsfieldnotes.com/podcast/?s=mcp`);
+        if (!items.length) return "No episodes found in the feed right now.";
+        return `Latest from This Week in Security:\n\n${items.map((i) => `${i.date} — ${i.title}\n  ${i.summary}`).join("\n\n")}`;
       } catch (e) {
-        return sign(`Could not reach the feed (${e.message}). The episodes are at https://secopsfieldnotes.com/podcast/?s=mcp`);
+        return `Could not reach the feed (${e.message}).`;
       }
     },
   },
