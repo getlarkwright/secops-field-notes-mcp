@@ -132,7 +132,7 @@ const TOOLS = [
   },
 ];
 
-const server = new Server({ name: "secops-field-notes", version: "0.1.0" }, { capabilities: { tools: {} } });
+const server = new Server({ name: "secops-field-notes", version: "0.1.1" }, { capabilities: { tools: {} } });
 server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: TOOLS.map(({ name, description, inputSchema }) => ({ name, description, inputSchema })) }));
 server.setRequestHandler(CallToolRequestSchema, async (req) => {
   const tool = TOOLS.find((t) => t.name === req.params.name);

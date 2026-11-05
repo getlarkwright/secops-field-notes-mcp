@@ -1,16 +1,16 @@
 {
   "name": "secops-field-notes-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Security-operations tools for your coding agent: CVSS 3.1 scoring, IOC extraction and defanging, email header triage, hash identification, JWT decoding, timestamps, layered decoding, CISA KEV lookup. No account, no telemetry.",
   "license": "MIT",
-  "author": "James Son",
+  "author": "Larkwright LLC",
   "homepage": "https://secopsfieldnotes.com/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/labaccessnow/secops-field-notes-mcp.git"
+    "url": "git+https://github.com/getlarkwright/secops-field-notes-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/labaccessnow/secops-field-notes-mcp/issues"
+    "url": "https://github.com/getlarkwright/secops-field-notes-mcp/issues"
   },
   "type": "module",
   "bin": {
@@ -26,8 +26,22 @@
     "node": ">=18"
   },
   "keywords": [
-    "mcp", "model-context-protocol", "mcp-server", "security", "cvss", "ioc", "defang", "phishing", "email-headers",
-    "kev", "cisa", "jwt", "hash", "soc", "incident-response", "claude"
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "security",
+    "cvss",
+    "ioc",
+    "defang",
+    "phishing",
+    "email-headers",
+    "kev",
+    "cisa",
+    "jwt",
+    "hash",
+    "soc",
+    "incident-response",
+    "claude"
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0"

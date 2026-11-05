@@ -15,7 +15,7 @@ Pin the version.
 **Claude Code**
 
 ```
-claude mcp add secops-field-notes -- npx -y github:labaccessnow/secops-field-notes-mcp#v0.1.0
+claude mcp add secops-field-notes -- npx -y github:getlarkwright/secops-field-notes-mcp#v0.1.1
 ```
 
 **Claude Desktop, Cursor, or any client with a JSON config**
@@ -25,7 +25,7 @@ claude mcp add secops-field-notes -- npx -y github:labaccessnow/secops-field-not
   "mcpServers": {
     "secops-field-notes": {
       "command": "npx",
-      "args": ["-y", "github:labaccessnow/secops-field-notes-mcp#v0.1.0"]
+      "args": ["-y", "github:getlarkwright/secops-field-notes-mcp#v0.1.1"]
     }
   }
 }
@@ -38,14 +38,14 @@ claude mcp add secops-field-notes -- npx -y github:labaccessnow/secops-field-not
   "mcpServers": {
     "secops-field-notes": {
       "command": "docker",
-      "args": ["run", "-i", "--rm", "ghcr.io/labaccessnow/secops-field-notes-mcp:0.1.0"]
+      "args": ["run", "-i", "--rm", "ghcr.io/getlarkwright/secops-field-notes-mcp:0.1.1"]
     }
   }
 }
 ```
 
 Node 18 or newer for the npx route. Also in the official MCP registry as
-`io.github.labaccessnow/secops-field-notes-mcp`.
+`io.github.getlarkwright/secops-field-notes-mcp`.
 
 ## Tools
 
@@ -103,5 +103,5 @@ arithmetic so floating-point noise never pushes a 4.0 to a 4.1. Log4Shell's vect
 
 ## Licence
 
-MIT. Written by James Son — network, security, and automation engineer. The logic is the same as the
+MIT © Larkwright LLC. Written by James Son — network, security, and automation engineer. The logic is the same as the
 free Field Kit desktop app's security tools, so the two stay in step. Corrections welcome.
